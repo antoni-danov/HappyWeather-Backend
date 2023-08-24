@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "+G/6V+dnoK1SgvOOserXHhEn0HNmlJsCypf+4JFwPn4nn4kUskHPsEamISnW5bjd0z6+FNYFv0kVFOf1PcREAA==",
+  "dgSpecHash": "v7MEiI04bhqYUOcQ7FxOJDLFge7XQ1ZES6+tNBJhyYdGWwy1ivHqmtIs4ulKO3AI84S9Jd8kroWnlCB+rzPvjg==",
   "success": true,
   "projectFilePath": "D:\\Toni\\Solutions\\HappyWeather\\HappyWeather-Backend\\HappyWeather\\WeatherWebAPI\\WeatherWebAPI.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Utilisateur\\.nuget\\packages\\dotenv.net\\3.1.2\\dotenv.net.3.1.2.nupkg.sha512"
+  ],
   "logs": []
 }
