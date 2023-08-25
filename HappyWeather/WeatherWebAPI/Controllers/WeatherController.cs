@@ -23,7 +23,7 @@ namespace WeatherWebAPI.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var result = response.Content.ReadAsStringAsync();
+                var result = await response.Content.ReadAsStreamAsync();
                 return Ok(result);
             }
             else
