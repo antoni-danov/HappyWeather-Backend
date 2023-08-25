@@ -24,3 +24,5 @@ D:\Toni\Solutions\HappyWeather\HappyWeather-Backend\HappyWeather\WeatherWebAPI\o
 D:\Toni\Solutions\HappyWeather\HappyWeather-Backend\HappyWeather\WeatherWebAPI\obj\Debug\net7.0\WeatherWebAPI.pdb
 D:\Toni\Solutions\HappyWeather\HappyWeather-Backend\HappyWeather\WeatherWebAPI\obj\Debug\net7.0\WeatherWebAPI.genruntimeconfig.cache
 D:\Toni\Solutions\HappyWeather\HappyWeather-Backend\HappyWeather\WeatherWebAPI\obj\Debug\net7.0\ref\WeatherWebAPI.dll
+D:\Toni\Solutions\HappyWeather\HappyWeather-Backend\HappyWeather\WeatherWebAPI\bin\Debug\net7.0\dotenv.net.dll
+D:\Toni\Solutions\HappyWeather\HappyWeather-Backend\HappyWeather\WeatherWebAPI\obj\Debug\net7.0\WeatherWebAPI.csproj.CopyComplete
