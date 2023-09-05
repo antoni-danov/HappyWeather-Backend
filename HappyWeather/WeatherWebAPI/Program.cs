@@ -20,6 +20,7 @@ namespace WeatherWebAPI
             builder.Services.AddControllers();
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IWeatherService, WeatherService>();
+            builder.Services.AddMemoryCache();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
