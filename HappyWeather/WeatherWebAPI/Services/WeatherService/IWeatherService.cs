@@ -4,6 +4,6 @@ namespace WeatherWebAPI.Services.WeatherService
 {
     public interface IWeatherService
     {
-        Task<HttpResponseMessage> CurrentCity(string city);
+        public Task<HttpResponseMessage> CurrentCity(string cityName);
     }
 }

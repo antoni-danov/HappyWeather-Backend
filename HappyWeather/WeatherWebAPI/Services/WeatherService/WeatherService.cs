@@ -5,18 +5,17 @@ namespace WeatherWebAPI.Services.WeatherService
 {
     public class WeatherService: IWeatherService
     {
-        private HttpClient _httpClient = new HttpClient();
-
-        public WeatherService(IHttpClientFactory clientFactory)
+        private HttpClient client;
+        public WeatherService()
         {
-            _httpClient = clientFactory.CreateClient();
-
+            this.client = new HttpClient();
         }
 
         public async Task<HttpResponseMessage> CurrentCity(string city)
         {
-            _httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("BASE_URL")!.ToString());
-            var response = await _httpClient.GetAsync($"current?access_key={Environment.GetEnvironmentVariable("API_KEY")}&query={city}");
+            
+            var response = await this.client.GetAsync($"{Environment.GetEnvironmentVariable("BASE_URL")}current?access_key={Environment.GetEnvironmentVariable("API_KEY")}&query={city}");
+
             return response;
         }
     }

@@ -17,13 +17,14 @@ namespace WeatherWebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCurrentCity()
+        [Route("{cityName}")]
+        public async Task<IActionResult> GetCurrentCity([FromRoute] string cityName)
         {
-            var response = await _service.CurrentCity("SoFia".ToLower());
+            var response = await _service.CurrentCity(cityName.ToLower());
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsStreamAsync();
+                var result = await response.Content.ReadAsStringAsync();
                 return Ok(result);
             }
             else
