@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using WeatherWebAPI.Models;
 using WeatherWebAPI.Services.WeatherService;
 
 namespace WeatherWebAPI.Controllers
@@ -18,14 +18,16 @@ namespace WeatherWebAPI.Controllers
 
         [HttpGet]
         [Route("{cityName}")]
-        public async Task<IActionResult> GetCurrentCity([FromRoute] string cityName)
+        public async Task<ActionResult<WeatherResult>> GetCurrentCity([FromRoute] string cityName)
         {
             var response = await _service.CurrentCity(cityName.ToLower());
 
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
-                return Ok(result);
+
+                WeatherResult finalResult = JsonConvert.DeserializeObject<WeatherResult>(result)!;
+                return Ok(finalResult);
             }
             else
             {
