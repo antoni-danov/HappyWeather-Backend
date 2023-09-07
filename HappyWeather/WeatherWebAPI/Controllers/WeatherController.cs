@@ -13,7 +13,7 @@ namespace WeatherWebAPI.Controllers
     {
         private readonly IMemoryCache _cache;
         private IWeatherService _service;
-        private List<WeatherResult> weatherCities = new List<WeatherResult>();
+        //private List<WeatherResult> weatherCities = new List<WeatherResult>();
 
         public WeatherController(IMemoryCache cache, IWeatherService service)
         {
@@ -35,7 +35,7 @@ namespace WeatherWebAPI.Controllers
                 {
                     var result = await response.Content.ReadAsStringAsync();
                     var finalResult = JsonConvert.DeserializeObject<WeatherResult>(result);
-                    weatherCities = CacheDataByCityName(finalResult);
+                    weatherCities = CacheDataByCityName(finalResult!);
 
                     var cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
 
@@ -49,10 +49,11 @@ namespace WeatherWebAPI.Controllers
                 }
 
             }
-            return Ok(weatherCities?.Find(x => x.Location?.Name == cityName!));
+            return Ok(weatherCities?.FirstOrDefault(x => x.Location?.Name?.ToLower() == cityName.ToLower()!));
         }
         private List<WeatherResult> CacheDataByCityName(WeatherResult cityName)
         {
+            var weatherCities = new List<WeatherResult>();
             weatherCities.Add(cityName);
             return weatherCities;
         }
