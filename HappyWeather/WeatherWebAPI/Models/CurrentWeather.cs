@@ -15,6 +15,9 @@ namespace WeatherWebAPI.Models
         public string[]? WeatherDescription { get; set; } // TODO
         public int WindSpeed { get; set; }
 
+        [JsonProperty(PropertyName = "wind_degree")]
+        public int WindDegree { get; set; }
+
         [JsonProperty(PropertyName = "wind_dir")]
         public string? WindDirection { get; set; }
         public int Pressure { get; set; }

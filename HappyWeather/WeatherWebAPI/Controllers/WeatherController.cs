@@ -13,7 +13,6 @@ namespace WeatherWebAPI.Controllers
     {
         private readonly IMemoryCache _cache;
         private IWeatherService _service;
-        //private List<WeatherResult> weatherCities = new List<WeatherResult>();
 
         public WeatherController(IMemoryCache cache, IWeatherService service)
         {
