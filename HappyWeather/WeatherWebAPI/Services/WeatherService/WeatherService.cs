@@ -13,7 +13,7 @@ namespace WeatherWebAPI.Services.WeatherService
 
         public async Task<HttpResponseMessage> CurrentCity(string city)
         {
-            
+
             var response = await this.client.GetAsync($"{Environment.GetEnvironmentVariable("BASE_URL")}current?access_key={Environment.GetEnvironmentVariable("API_KEY")}&query={city}");
 
             return response;
