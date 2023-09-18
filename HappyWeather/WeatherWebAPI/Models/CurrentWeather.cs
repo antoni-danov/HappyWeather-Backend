@@ -26,5 +26,7 @@ namespace WeatherWebAPI.Models
         public int CloudCover { get; set; }
         public int UVIndex { get; set; }
         public int Visibility { get; set; }
+        [JsonProperty(PropertyName ="is_day")]
+        public string? IsDay { get; set; }
     }
 }
