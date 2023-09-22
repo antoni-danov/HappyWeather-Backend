@@ -18,9 +18,9 @@ namespace WeatherWebAPI.Controllers
 
         [HttpGet]
         [Route("{cityName}")]
-        public async Task<ActionResult<WeatherResult>> GetCurrentCity([FromRoute] string cityName)
+        public async Task<ActionResult<WeatherResult>> RealTimeForecast([FromRoute] string cityName)
         {
-            var response = await _service.CurrentCity(cityName.ToLower());
+            var response = await _service.GetRealTimeForecast(cityName.ToLower());
 
             if (response.IsSuccessStatusCode)
             {
