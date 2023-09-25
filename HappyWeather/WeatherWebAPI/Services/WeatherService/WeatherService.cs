@@ -11,12 +11,7 @@ namespace WeatherWebAPI.Services.WeatherService
             this.client = new HttpClient();
         }
 
-        public async Task<HttpResponseMessage> CurrentCity(string city)
-        {
-
-            var response = await this.client.GetAsync($"{Environment.GetEnvironmentVariable("BASE_URL")}current?access_key={Environment.GetEnvironmentVariable("API_KEY")}&query={city}");
-
-            return response;
-        }
+        public async Task<HttpResponseMessage> GetRealTimeForecast(string city, string unit) => await this.client.GetAsync($"{Environment.GetEnvironmentVariable("TOMORROW_BASE_URL")}weather/realtime?location={city}&language=en-US&units={unit}&apikey={Environment.GetEnvironmentVariable("TOMORROW_API_KEY")}");
+        
     }
 }

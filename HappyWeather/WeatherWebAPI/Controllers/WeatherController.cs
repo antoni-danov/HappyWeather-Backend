@@ -22,7 +22,7 @@ namespace WeatherWebAPI.Controllers
 
         [HttpGet]
         [Route("{cityName}")]
-        public async Task<ActionResult<WeatherResult>> GetCurrentCity([FromRoute] string cityName)
+        public async Task<ActionResult<WeatherResult>> RealTimeForecast(string cityName, string unit)
         {
             string cacheKey = $"WeatherData: {cityName}";
 
