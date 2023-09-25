@@ -28,7 +28,7 @@ namespace WeatherWebAPI.Controllers
 
             if (!_cache.TryGetValue(cacheKey, out List<WeatherResult> weatherCities))
             {
-                var response = await _service.CurrentCity(cityName.ToLower());
+                var response = await _service.GetRealTimeForecast(cityName, unit);
 
                 if (response.IsSuccessStatusCode)
                 {
