@@ -24,9 +24,9 @@ namespace WeatherWebAPI.Controllers
         [Route("{cityName}")]
         public async Task<ActionResult<WeatherResult>> RealTimeForecast(string cityName, string unit)
         {
-            string cacheKey = $"WeatherData: {cityName}";
+            string cacheKey = $"{cityName}";
 
-            if (!_cache.TryGetValue(cacheKey, out List<WeatherResult> weatherCities))
+            if (!_cache.TryGetValue(cacheKey, out Dictionary<string, WeatherResult>? weatherCities))
             {
                 var response = await _service.GetRealTimeForecast(cityName, unit);
 
@@ -34,7 +34,7 @@ namespace WeatherWebAPI.Controllers
                 {
                     var result = await response.Content.ReadAsStringAsync();
                     var finalResult = JsonConvert.DeserializeObject<WeatherResult>(result);
-                    weatherCities = CacheDataByCityName(finalResult!);
+                    weatherCities = CacheDataByCityName(cacheKey, finalResult!);
 
                     var cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
 
@@ -48,12 +48,12 @@ namespace WeatherWebAPI.Controllers
                 }
 
             }
-            return Ok(weatherCities?.FirstOrDefault(x => x.Location?.Name?.ToLower() == cityName.ToLower()!));
+            return Ok(weatherCities?[cityName]);
         }
-        private List<WeatherResult> CacheDataByCityName(WeatherResult cityName)
+        private Dictionary<string, WeatherResult> CacheDataByCityName(string key, WeatherResult cityName)
         {
-            var weatherCities = new List<WeatherResult>();
-            weatherCities.Add(cityName);
+            var weatherCities = new Dictionary<string, WeatherResult>();
+            weatherCities.Add(key, cityName);
             return weatherCities;
         }
     }

@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace WeatherWebAPI.Models
+﻿namespace WeatherWebAPI.Models
 {
     public class WeatherValues
     {
@@ -24,7 +22,7 @@ namespace WeatherWebAPI.Models
         
         //Kilometers
         public double Visibility { get; set; }
-        public WeatherCode WeatherCode { get; set; }
+        public WeatherCodeFullDay WeatherCode { get; set; }
 
         //Degree
         public double WindDirection { get; set; }
