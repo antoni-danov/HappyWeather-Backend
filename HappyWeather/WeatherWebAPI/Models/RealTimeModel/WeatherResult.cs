@@ -1,4 +1,4 @@
-﻿namespace WeatherWebAPI.Models
+﻿namespace WeatherWebAPI.Models.RealTimeModel
 {
     public class WeatherResult
     {
