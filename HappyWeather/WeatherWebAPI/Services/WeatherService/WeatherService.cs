@@ -16,5 +16,10 @@ namespace WeatherWebAPI.Services.WeatherService
         {
             return await this.client.GetAsync($"{Environment.GetEnvironmentVariable("TOMORROW_BASE_URL")}/weather/forecast?location={city}&timesteps={timeStep}&units={unit}&apikey={Environment.GetEnvironmentVariable("TOMORROW_API_KEY")}");
         }
+        public async Task<HttpResponseMessage> GetHourlyWeatherForecast(string city, string timeStep, string unit)
+        {
+            return await this.client.GetAsync($"{Environment.GetEnvironmentVariable("TOMORROW_BASE_URL")}/weather/forecast?location={city}&timesteps={timeStep}&units={unit}&apikey={Environment.GetEnvironmentVariable("TOMORROW_API_KEY")}");
+        }
+
     }
 }
