@@ -42,7 +42,7 @@ namespace WeatherWebAPI.Controllers
                     //get the result as string
                     var result = await response.Content.ReadAsStringAsync();
                     //deserialize it to custom object
-                    dynamic finalResult = JsonConvert.DeserializeObject<WeatherResult>(result);
+                    dynamic finalResult = JsonConvert.DeserializeObject<WeatherResult>(result)!;
                     //evoque the CacheDataByCityName method and return Dictionnary collection with key, value pair 
                     weatherCities = CacheDataByCityName(cacheKey, finalResult!);
                     //Set expiration time for the memory cache data
@@ -62,20 +62,20 @@ namespace WeatherWebAPI.Controllers
 
         [HttpGet]
         [Route("{cityName}/dailyforecast")]
-        public async Task<ActionResult> FiveDayWeatherCast(string cityName, string timeStep, string unit)
+        public async Task<ActionResult> DailyForecast(string cityName, string timeStep, string unit)
         {
             string cacheKey = $"Five days: {cityName}";
 
             if (!_cache.TryGetValue(cacheKey, out Dictionary<string, WeatherForecast<DayUnit>>? fiveDaysForecast))
             {
-                var response = await _service.GetFiveDaysWeatherForecast(cityName, timeStep, unit);
+                var response = await _service.GetDailyWeatherForecast(cityName, timeStep, unit);
 
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsStringAsync();
                     var finalResult = JsonConvert.DeserializeObject<WeatherForecast<DayUnit>>(result)!;
                     finalResult.TimeLines.Daily = finalResult.TimeLines?.Daily?.Skip(1).ToList();
-                    fiveDaysForecast = FiveDaysCachedData(cacheKey, finalResult!);
+                    fiveDaysForecast = DailyForecastCachedData(cacheKey, finalResult!);
 
                     var cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
 
@@ -129,7 +129,7 @@ namespace WeatherWebAPI.Controllers
             weatherCities.Add(key, cityName);
             return weatherCities;
         }
-        private Dictionary<string, WeatherForecast<DayUnit>> FiveDaysCachedData(string key, WeatherForecast<DayUnit> cityData)
+        private Dictionary<string, WeatherForecast<DayUnit>> DailyForecastCachedData(string key, WeatherForecast<DayUnit> cityData)
         {
             var fiveDaysForecast = new Dictionary<string, WeatherForecast<DayUnit>>();
             fiveDaysForecast.Add(key, cityData);
