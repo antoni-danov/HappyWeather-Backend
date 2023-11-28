@@ -106,7 +106,6 @@ namespace WeatherWebAPI.Controllers
                 {
                     var result = await response.Content.ReadAsStringAsync();
                     var finalResult = JsonConvert.DeserializeObject<WeatherForecast<HourUnit>>(result)!;
-                    finalResult.TimeLines.Hourly = finalResult.TimeLines?.Hourly?.Take(25).ToList();
                     hourlyForecast = HourlyForecastCachedData(cacheKey, finalResult!);
                     var cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
 
