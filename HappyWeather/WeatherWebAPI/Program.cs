@@ -13,7 +13,7 @@ namespace WeatherWebAPI
             // Add services to the container.
             builder.Services.AddCors(o => o.AddPolicy("Policy", builder =>
             {
-                builder.WithOrigins("http://localhost:4200")
+                builder.WithOrigins("https://happyweathers.netlify.app", "http://localhost:4200")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
             }));
