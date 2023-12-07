@@ -6,7 +6,7 @@ namespace WeatherWebAPI.Models.RealTimeModel
     public class WeatherData
     {
         [JsonProperty(PropertyName = "time")]
-        public string WeatherDateTime { get; set; }
+        public string Time { get; set; }
 
         [JsonProperty(PropertyName = "values")]
         public WeatherValues? Values { get; set; }
