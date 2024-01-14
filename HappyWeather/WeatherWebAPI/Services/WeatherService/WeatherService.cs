@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using WeatherWebAPI.Models.FiveDaysModel.DayModel;
 using WeatherWebAPI.Models.HourlyForecastModel.HourModel;
@@ -17,19 +18,19 @@ namespace WeatherWebAPI.Services.WeatherService
             this.client = new HttpClient();
         }
 
-        public async Task<dynamic> GetRealTimeForecast(string city, string unit)
+        public async Task<WeatherResult> GetRealTimeForecast(string city, string unit)
         {
-            // create cache key
-            string cacheKey = $"{city}";
-
-            //check if the cahche key already exists
-            if (!_cache.TryGetValue(cacheKey, out Dictionary<string, WeatherResult>? weatherCities))
+            try
             {
-                HttpResponseMessage response = await this.client.GetAsync($"{Environment.GetEnvironmentVariable("TOMORROW_BASE_URL")}weather/realtime?location={city}&language=en-US&units={unit}&apikey={Environment.GetEnvironmentVariable("TOMORROW_API_KEY")}");
+                // create cache key
+                string cacheKey = $"{city}";
 
-                //if is successful transform the result
-                if (response.IsSuccessStatusCode)
+                //check if the cahche key already exists
+                if (!_cache.TryGetValue(cacheKey, out Dictionary<string, WeatherResult>? weatherCities))
                 {
+                    HttpResponseMessage response = await this.client.GetAsync($"{Environment.GetEnvironmentVariable("TOMORROW_BASE_URL")}weather/realtime?location={city}&language=en-US&units={unit}&apikey={Environment.GetEnvironmentVariable("TOMORROW_API_KEY")}");
+                    //if is successful transform the result
+                    response.EnsureSuccessStatusCode();
                     var finalResult = TransformData<WeatherResult>(response);
                     //evoque the CacheDataByCityName method and return Dictionnary collection with key, value pair 
                     weatherCities = CacheData<WeatherResult>(cacheKey, finalResult.Result!);
@@ -39,25 +40,26 @@ namespace WeatherWebAPI.Services.WeatherService
                     _cache.Set(cacheKey, weatherCities, cacheEntryOptions);
                     return finalResult.Result;
                 }
-                else
-                {
-                    return ((int)response.StatusCode, "Weather API request failed.");
-                }
+                return weatherCities![city];
             }
-            return weatherCities?[city];
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
 
-        public async Task<dynamic> GetDailyWeatherForecast(string city, string timeStep, string unit)
+        public async Task<WeatherForecast<DayUnit>> GetDailyWeatherForecast(string city, string timeStep, string unit)
         {
-            string cacheKey = $"Five days: {city}";
-
-            if (!_cache.TryGetValue(cacheKey, out Dictionary<string, WeatherForecast<DayUnit>>? fiveDaysForecast))
+            try
             {
-                HttpResponseMessage response = await this.client.GetAsync($"{Environment.GetEnvironmentVariable("TOMORROW_BASE_URL")}/weather/forecast?location={city}&timesteps={timeStep}&units={unit}&apikey={Environment.GetEnvironmentVariable("TOMORROW_API_KEY")}");
+                string cacheKey = $"Five days: {city}";
 
-                //if is successful transform the result
-                if (response.IsSuccessStatusCode)
+                if (!_cache.TryGetValue(cacheKey, out Dictionary<string, WeatherForecast<DayUnit>>? fiveDaysForecast))
                 {
+                    HttpResponseMessage response = await this.client.GetAsync($"{Environment.GetEnvironmentVariable("TOMORROW_BASE_URL")}/weather/forecast?location={city}&timesteps={timeStep}&units={unit}&apikey={Environment.GetEnvironmentVariable("TOMORROW_API_KEY")}");
+
+                    //if is successful transform the result
+                    response.EnsureSuccessStatusCode();
                     var finalResult = TransformData<WeatherForecast<DayUnit>>(response);
                     //evoque the CacheDataByCityName method and return Dictionnary collection with key, value pair 
                     fiveDaysForecast = CacheData<WeatherForecast<DayUnit>>(cacheKey, finalResult.Result!);
@@ -67,26 +69,28 @@ namespace WeatherWebAPI.Services.WeatherService
                     _cache.Set(cacheKey, fiveDaysForecast, cacheEntryOptions);
                     return finalResult.Result;
                 }
-                else
-                {
-                    return ((int)response.StatusCode, "Weather API request failed.");
-                }
-            }
-            return fiveDaysForecast?[cacheKey];
 
+                return fiveDaysForecast![cacheKey];
+            }
+            catch (Exception ex)
+            {
+
+                throw new ArgumentException(ex.Message);
+            }
         }
 
-        public async Task<dynamic> GetHourlyWeatherForecast(string city, string timeStep, string unit)
+        public async Task<WeatherForecast<HourUnit>> GetHourlyWeatherForecast(string city, string timeStep, string unit)
         {
-            string cacheKey = $"Hourly: {city}";
-
-            if (!_cache.TryGetValue(cacheKey, out Dictionary<string, WeatherForecast<HourUnit>>? hourlyForecast))
+            try
             {
-                HttpResponseMessage response = await this.client.GetAsync($"{Environment.GetEnvironmentVariable("TOMORROW_BASE_URL")}/weather/forecast?location={city}&timesteps={timeStep}&units={unit}&apikey={Environment.GetEnvironmentVariable("TOMORROW_API_KEY")}");
+                string cacheKey = $"Hourly: {city}";
 
-                //if is successful transform the result
-                if (response.IsSuccessStatusCode)
+                if (!_cache.TryGetValue(cacheKey, out Dictionary<string, WeatherForecast<HourUnit>>? hourlyForecast))
                 {
+                    HttpResponseMessage response = await this.client.GetAsync($"{Environment.GetEnvironmentVariable("TOMORROW_BASE_URL")}/weather/forecast?location={city}&timesteps={timeStep}&units={unit}&apikey={Environment.GetEnvironmentVariable("TOMORROW_API_KEY")}");
+
+                    //if is successful transform the result
+                    response.EnsureSuccessStatusCode();
                     var finalResult = TransformData<WeatherForecast<HourUnit>>(response);
                     //evoque the CacheDataByCityName method and return Dictionnary collection with key, value pair 
                     hourlyForecast = CacheData<WeatherForecast<HourUnit>>(cacheKey, finalResult.Result!);
@@ -95,13 +99,14 @@ namespace WeatherWebAPI.Services.WeatherService
                     //Set the cache
                     _cache.Set(cacheKey, hourlyForecast, cacheEntryOptions);
                     return finalResult.Result;
+
                 }
-                else
-                {
-                    return ((int)response.StatusCode, "Weather API request failed.");
-                }
+                return hourlyForecast![cacheKey];
             }
-            return hourlyForecast?[cacheKey];
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
 
         private async Task<dynamic> TransformData<T>(HttpResponseMessage data)
@@ -127,7 +132,7 @@ namespace WeatherWebAPI.Services.WeatherService
                 //deserialize it to custom object
                 var currentResult = JsonConvert.DeserializeObject<WeatherForecast<DayUnit>>(transformedData)!;
                 currentResult.TimeLines.Daily = currentResult.TimeLines?.Daily?.Skip(1).ToList();
-               
+
                 return currentResult;
             }
 

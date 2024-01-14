@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using WeatherWebAPI.Models.FiveDaysModel.DayModel;
 using WeatherWebAPI.Models.HourlyForecastModel.HourModel;
 using WeatherWebAPI.Models.RealTimeModel;
@@ -12,28 +13,36 @@ namespace WeatherWebAPI.Controllers
     [Route("api/[controller]")]
     public class WeatherController : ControllerBase
     {
+        private ILogger<WeatherController> _logger;
         private IWeatherService _service;
-        public WeatherController(IWeatherService service)
+        public WeatherController(ILogger<WeatherController> logger, IWeatherService service)
         {
+            _logger = logger;
             _service = service;
         }
 
         [HttpGet]
         [Route("{cityName}")]
-        public async Task<ActionResult<WeatherResult>> RealTimeForecast(string cityName, string unit)
+        public async Task<ActionResult> RealTimeForecast(string cityName, string unit)
         {
             var response = new WeatherResult();
-           
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("The city name is required.");
+            }
+
             try
             {
                 response = await _service.GetRealTimeForecast(cityName, unit);
-
-                return Ok(response);
             }
             catch (Exception ex)
             {
-                return BadRequest(response);
+                _logger.LogError($"Something went wrong inside RealTimeForecast action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
             }
+
+            return Ok(response);
 
         }
 
@@ -43,16 +52,22 @@ namespace WeatherWebAPI.Controllers
         {
             var response = new WeatherForecast<DayUnit>();
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("The city name is required.");
+            }
+
             try
             {
                 response = await _service.GetDailyWeatherForecast(cityName, timeStep, unit);
-
-                return Ok(response);
             }
             catch (Exception ex)
             {
-                return BadRequest(response);
+                _logger.LogError($"Something went wrong inside DailyForecast action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
             }
+            return Ok(response);
+
         }
 
         [HttpGet]
@@ -61,15 +76,23 @@ namespace WeatherWebAPI.Controllers
         {
             var response = new WeatherForecast<HourUnit>();
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("The city name is required.");
+            }
+
             try
             {
                 response = await _service.GetHourlyWeatherForecast(cityName, timeStep, unit);
-                return Ok(response);
             }
             catch (Exception ex)
             {
-                return BadRequest(response);
+                _logger.LogError($"Something went wrong inside HourlyForecast action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
             }
+
+            return Ok(response);
+
         }
     }
 }
