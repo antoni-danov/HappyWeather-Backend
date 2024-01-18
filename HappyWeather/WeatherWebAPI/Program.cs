@@ -1,4 +1,5 @@
 using dotenv.net;
+using WeatherWebAPI.Middlewares;
 using WeatherWebAPI.Services.WeatherService;
 
 namespace WeatherWebAPI

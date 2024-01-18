@@ -1,5 +1,4 @@
-﻿
-namespace WeatherWebAPI
+﻿namespace WeatherWebAPI.Middlewares
 {
     public class ExceptionHandlerMiddleware : IMiddleware
     {
