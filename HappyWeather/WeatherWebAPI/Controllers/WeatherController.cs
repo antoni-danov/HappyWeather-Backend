@@ -25,22 +25,16 @@ namespace WeatherWebAPI.Controllers
         [Route("{cityName}")]
         public async Task<ActionResult> RealTimeForecast(string cityName, string unit)
         {
-            var response = new WeatherResult();
-
-            if (!ModelState.IsValid)
+            if (String.IsNullOrEmpty(cityName))
             {
-                return BadRequest("The city name is required.");
+                return BadRequest("City name is required.");
+            }
+            if (String.IsNullOrEmpty(unit))
+            {
+                return BadRequest("Unit field is required.");
             }
 
-            try
-            {
-                response = await _service.GetRealTimeForecast(cityName, unit);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside RealTimeForecast action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var response = await _service.GetRealTimeForecast(cityName, unit);
 
             return Ok(response);
 
@@ -50,22 +44,20 @@ namespace WeatherWebAPI.Controllers
         [Route("{cityName}/dailyforecast")]
         public async Task<ActionResult> DailyForecast(string cityName, string timeStep, string unit)
         {
-            var response = new WeatherForecast<DayUnit>();
-
-            if (!ModelState.IsValid)
+            if (String.IsNullOrEmpty(cityName))
             {
-                return BadRequest("The city name is required.");
+                return BadRequest("City name is required.");
+            }
+            if (String.IsNullOrEmpty(unit))
+            {
+                return BadRequest("Unit field is required.");
+            }
+            if (String.IsNullOrEmpty(timeStep))
+            {
+                return BadRequest("Timestep field is required.");
             }
 
-            try
-            {
-                response = await _service.GetDailyWeatherForecast(cityName, timeStep, unit);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside DailyForecast action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var response = await _service.GetDailyWeatherForecast(cityName, timeStep, unit);
             return Ok(response);
 
         }
@@ -74,25 +66,22 @@ namespace WeatherWebAPI.Controllers
         [Route("{cityName}/hourlyforecast")]
         public async Task<ActionResult> HourlyForecast(string cityName, string timeStep, string unit)
         {
-            var response = new WeatherForecast<HourUnit>();
-
-            if (!ModelState.IsValid)
+            if (String.IsNullOrEmpty(cityName))
             {
-                return BadRequest("The city name is required.");
+                return BadRequest("City name is required.");
+            }
+            if (String.IsNullOrEmpty(unit))
+            {
+                return BadRequest("Unit field is required.");
+            }
+            if (String.IsNullOrEmpty(timeStep))
+            {
+                return BadRequest("Timestep field is required.");
             }
 
-            try
-            {
-                response = await _service.GetHourlyWeatherForecast(cityName, timeStep, unit);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside HourlyForecast action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var response = await _service.GetHourlyWeatherForecast(cityName, timeStep, unit);
 
             return Ok(response);
-
         }
     }
 }

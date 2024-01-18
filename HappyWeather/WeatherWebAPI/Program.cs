@@ -20,12 +20,12 @@ namespace WeatherWebAPI
             builder.Services.AddControllers();
             builder.Services.AddHttpClient();
             builder.Services.AddScoped<IWeatherService, WeatherService>();
+            builder.Services.AddScoped<ExceptionHandlerMiddleware>();
             builder.Services.AddMemoryCache();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-
-            app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseAuthorization();
             app.UseCors(o => o.AllowAnyOrigin()

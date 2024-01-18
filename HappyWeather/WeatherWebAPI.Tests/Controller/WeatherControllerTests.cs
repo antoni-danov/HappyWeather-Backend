@@ -23,12 +23,12 @@ namespace WeatherWebAPI.Tests.Controller
         public async Task RealTimeForecast_ValidCityAndUnit_ReturnsOkResult()
         {
             //Arrange
-            _fixture.MockService?.Setup(service => service.GetRealTimeForecast(_variables.cityName, _variables.unit))
+            _fixture.MockService?.Setup(service => service.GetRealTimeForecast(_variables.CityName, _variables.Unit))
                 .ReturnsAsync(new WeatherResult());
             _fixture.Controller?.ModelState.Clear();
 
             //Act
-            var result = await _fixture.Controller!.RealTimeForecast(_variables.cityName, _variables.unit);
+            var result = await _fixture.Controller!.RealTimeForecast(_variables.CityName, _variables.Unit);
 
             //Assert
 
@@ -45,7 +45,7 @@ namespace WeatherWebAPI.Tests.Controller
             _fixture.Controller?.ModelState.AddModelError("CityName", "The city name is required.");
 
             //Act
-            var result = await _fixture.Controller!.RealTimeForecast(_variables.invalidCity, _variables.unit);
+            var result = await _fixture.Controller!.RealTimeForecast(_variables.InvalidCity, _variables.Unit);
 
             //Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
@@ -58,12 +58,12 @@ namespace WeatherWebAPI.Tests.Controller
         public async Task DailyForecast_ValidCityAndUnit_ReturnsOKResult()
         {
             //Arrange
-            _fixture.MockService?.Setup(service => service.GetDailyWeatherForecast(_variables.cityName, _variables.dailyStep, _variables.unit))
+            _fixture.MockService?.Setup(service => service.GetDailyWeatherForecast(_variables.CityName, _variables.DailyStep, _variables.Unit))
                 .ReturnsAsync(new WeatherForecast<DayUnit>());
             _fixture.Controller?.ModelState.Clear();
 
             //Act
-            var result = await _fixture.Controller!.DailyForecast(_variables.cityName, _variables.dailyStep, _variables.unit);
+            var result = await _fixture.Controller!.DailyForecast(_variables.CityName, _variables.DailyStep, _variables.Unit);
 
             //Assert
             var actionResult = Assert.IsAssignableFrom<ActionResult>(result);
@@ -78,7 +78,7 @@ namespace WeatherWebAPI.Tests.Controller
             //Arrange
             _fixture.Controller?.ModelState.AddModelError("CityName", "The city name is required.");
             //Act
-            var result = await _fixture.Controller!.DailyForecast(_variables.invalidCity, _variables.dailyStep, _variables.unit);
+            var result = await _fixture.Controller!.DailyForecast(_variables.InvalidCity, _variables.DailyStep, _variables.Unit);
 
             //Assert
             var badRequest = Assert.IsType<BadRequestObjectResult>(result);
@@ -89,12 +89,12 @@ namespace WeatherWebAPI.Tests.Controller
         public async Task HourlyForecast_ValidCityAndUnit_ReturnsOKResult()
         {
             //Arrange
-            _fixture.MockService?.Setup(service => service.GetHourlyWeatherForecast(_variables.cityName, _variables.hourlyStep, _variables.unit))
+            _fixture.MockService?.Setup(service => service.GetHourlyWeatherForecast(_variables.CityName, _variables.HourlyStep, _variables.Unit))
                 .ReturnsAsync(new WeatherForecast<HourUnit>());
             _fixture.Controller?.ModelState.Clear();
 
             //Act
-            var result = await _fixture.Controller!.HourlyForecast(_variables.cityName, _variables.hourlyStep, _variables.unit);
+            var result = await _fixture.Controller!.HourlyForecast(_variables.CityName, _variables.HourlyStep, _variables.Unit);
 
             //Assert
             var actionResult = Assert.IsAssignableFrom<ActionResult>(result);
@@ -110,7 +110,7 @@ namespace WeatherWebAPI.Tests.Controller
             _fixture.Controller?.ModelState.AddModelError("CityName", "The city name is required.");
 
             //Act
-            var result = await _fixture.Controller!.HourlyForecast(_variables.cityName, _variables.hourlyStep, _variables.unit);
+            var result = await _fixture.Controller!.HourlyForecast(_variables.CityName, _variables.HourlyStep, _variables.Unit);
 
             //Assert
             var badRequest = Assert.IsType<BadRequestObjectResult>(result);
